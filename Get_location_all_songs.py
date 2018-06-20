@@ -1,5 +1,6 @@
 import os
 import eyed3
+import scrape_image_from_google_images
 
 asps = []
 for root, dirs, files in os.walk(r'D:\\'):
@@ -44,3 +45,6 @@ for i in range(len(music_names)):
 import re 
 for i in range(len(music_names)):
     music_names[i][0] = re.sub("[\(\[].*?[\)\]]", "", music_names[i][0])
+
+for i in range(len(music_names)):
+    scrape_image_from_google_images.scrape_google_image(music_names[i][0]+" song cover art")
