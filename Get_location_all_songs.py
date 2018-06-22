@@ -7,6 +7,7 @@ for root, dirs, files in os.walk(r'D:\\'):
     for file in files:
         if file.endswith('.mp3'):
             asps.append(os.path.join(root, file))
+
      
        #Get songs name with location 
 music_names = []
@@ -47,4 +48,7 @@ for i in range(len(music_names)):
     music_names[i][0] = re.sub("[\(\[].*?[\)\]]", "", music_names[i][0])
 
 for i in range(len(music_names)):
-    scrape_image_from_google_images.scrape_google_image(music_names[i][0]+" song cover art")
+    audiofile = eyed3.load(music_names[i][1])
+    scrape_image_from_google_images.scrape_google_image(music_names[i][0]+    \
+                                                        " song cover art",name=music_names[i][0])
+    

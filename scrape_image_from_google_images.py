@@ -16,7 +16,7 @@ def scrape_google_image(query,num = 1,address = None, name = None):
     
     Images_Links = []
     i=0
-    print("Finding images of "+query)
+    print("Finding images of "+query.replace("+"," "))
     for a in soup.find_all("div",{"class":"rg_meta"}):
         link , Type =json.loads(a.text)["ou"]  ,json.loads(a.text)["ity"]
         Images_Links.append((link,Type))
@@ -43,6 +43,7 @@ def scrape_google_image(query,num = 1,address = None, name = None):
                 break
         except:
             continue
+
         
 if __name__ == '__main__':
     query = input("Enter the keyword: ")
