@@ -1,6 +1,35 @@
 import os
 import eyed3
 import scrape_image_from_google_images
+from PIL import ImageTk, Image
+import tkinter as tk
+
+def tkinter_window(location):
+    window = tk.Tk()
+    window.title("Add cover art")
+    #window.geometry("600x500")
+    name = tk.Label(window,text='Do u want this images as cover art' )
+    path = location
+    img = ImageTk.PhotoImage(Image.open(path))
+    panel = tk.Label(window, image = img)
+    song_query_question = tk.Label(window,text='Enter text to search' )
+    song_query = tk.Entry(window)
+    OK= tk.Button(window, text="Okay",command = add_image(location))
+    Cancel = tk.Button(window, text="Cancel")
+    Next= tk.Button(window, text="Next",command = window.destroy)
+    
+    name.grid(column=0,row=0,columnspan=6)
+    panel.grid(column=0,row=1,columnspan=3,rowspan =3)
+    OK.grid(column=0,row=4,columnspan=2)
+    Next.grid(column=2,row=4)
+    song_query_question.grid(column=3,row=1,columnspan=3)
+    song_query.grid(column=3,row=2,columnspan=3)
+    Cancel.grid(column=4,row=4,columnspan=2)
+    
+    window.mainloop()
+
+def add_image(location):
+    print('hello')
 
 asps = []
 for root, dirs, files in os.walk(r'D:\\'):
@@ -49,6 +78,8 @@ for i in range(len(music_names)):
 
 for i in range(len(music_names)):
     audiofile = eyed3.load(music_names[i][1])
-    scrape_image_from_google_images.scrape_google_image(music_names[i][0]+    \
+    song_file_name=scrape_image_from_google_images.scrape_google_image(music_names[i][0]+    \
                                                         " song cover art",name=music_names[i][0])
+    tkinter_window(song_file_name)
+    
     

@@ -37,13 +37,13 @@ def scrape_google_image(query,num = 1,address = None, name = None):
                     urllib.request.urlretrieve(ActualImages[i],str(i)+"."+ActualImages[i].split(".")[-1])
                     print("Images Downloaded: "+ str(i/num*100) + "%\n")
                 else:
-                    urllib.request.urlretrieve(ActualImages[i],"./images/"+name+"_"+str(i)+"."+ActualImages[i].split(".")[-1])
+                    urllib.request.urlretrieve(ActualImages[i],"./images/"+name+"."+ActualImages[i].split(".")[-1])
                     print("Images Downloaded: "+ str(i/num*100) + "%\n")
             else:
                 break
         except:
             continue
-
+    return "./images/"+name+"."+ActualImages[0].split(".")[-1]
         
 if __name__ == '__main__':
     query = input("Enter the keyword: ")
