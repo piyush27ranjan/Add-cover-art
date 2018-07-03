@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib
 import json
+import os
 
 def get_soup(url,header):
     return BeautifulSoup(urllib.request.urlopen(urllib.request.Request(url,headers=header)),'html.parser')
@@ -8,6 +9,8 @@ def get_soup(url,header):
 
 
 def scrape_google_image(query,num = 1,address = None, name = None):
+    if not os.path.exists("./images"):
+        os.makedirs("./images")
     query= query.split()
     query='+'.join(query)
     url="https://www.google.co.in/search?q="+query+"&source=lnms&tbm=isch"
@@ -35,10 +38,10 @@ def scrape_google_image(query,num = 1,address = None, name = None):
             if num > 0:
                 if name is None:
                     urllib.request.urlretrieve(ActualImages[i],str(i)+"."+ActualImages[i].split(".")[-1])
-                    print("Images Downloaded: "+ str(i/num*100) + "%\n")
+                    print("Images Downloaded: "+ str((i+1)/num*100) + "%\n")
                 else:
                     urllib.request.urlretrieve(ActualImages[i],"./images/"+name+"."+ActualImages[i].split(".")[-1])
-                    print("Images Downloaded: "+ str(i/num*100) + "%\n")
+                    print("Images Downloaded: "+ str((i+1)/num*100) + "%\n")
             else:
                 break
         except:

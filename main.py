@@ -14,7 +14,7 @@ def tkinter_window(location,audiofile):
     panel = tk.Label(window, image = img)
     song_query_question = tk.Label(window,text='Enter text to search' )
     song_query = tk.Entry(window)
-    OK= tk.Button(window, text="Okay",command = add_image(location,audiofile,window))
+    OK= tk.Button(window, text="Okay",command = add_image(location,audiofile))
     Cancel = tk.Button(window, text="Cancel",command = window.destroy)
     Next= tk.Button(window, text="Next",command = window.destroy)
     
@@ -28,13 +28,12 @@ def tkinter_window(location,audiofile):
     
     window.mainloop()
 
-def add_image(location,audiofile,window):
+def add_image(location,audiofile):
     if (audiofile.tag == None):
         audiofile.initTag()
     print(audiofile.tag.album_artist)
     audiofile.tag.images.set(3, open(location,'rb').read(), 'image/jpeg')
     audiofile.tag.save()
-    window.destroy()
     
 print("Finding all .mp3 files")
 asps = []
