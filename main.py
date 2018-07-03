@@ -14,8 +14,8 @@ def tkinter_window(location,audiofile):
     panel = tk.Label(window, image = img)
     song_query_question = tk.Label(window,text='Enter text to search' )
     song_query = tk.Entry(window)
-    OK= tk.Button(window, text="Okay",command = add_image(location,audiofile))
-    Cancel = tk.Button(window, text="Cancel")
+    OK= tk.Button(window, text="Okay",command = add_image(location,audiofile,window))
+    Cancel = tk.Button(window, text="Cancel",command = window.destroy)
     Next= tk.Button(window, text="Next",command = window.destroy)
     
     name.grid(column=0,row=0,columnspan=6)
@@ -28,15 +28,17 @@ def tkinter_window(location,audiofile):
     
     window.mainloop()
 
-def add_image(location,audiofile):
+def add_image(location,audiofile,window):
     if (audiofile.tag == None):
         audiofile.initTag()
     print(audiofile.tag.album_artist)
     audiofile.tag.images.set(3, open(location,'rb').read(), 'image/jpeg')
     audiofile.tag.save()
+    window.destroy()
+    
 print("Finding all .mp3 files")
 asps = []
-for root, dirs, files in os.walk(r'D:\\Music\\Maroon 5\\[2014] V [Limited Deluxe Edition]'):
+for root, dirs, files in os.walk(r'D:\\'):
     for file in files:
         if file.endswith('.mp3'):
             asps.append(os.path.join(root, file))
