@@ -4,17 +4,17 @@ import scrape_image_from_google_images
 from PIL import ImageTk, Image
 import tkinter as tk
 
-def tkinter_window(location):
+def tkinter_window(location,audiofile):
     window = tk.Tk()
     window.title("Add cover art")
-    #window.geometry("600x500")
+    window.geometry("600x500")
     name = tk.Label(window,text='Do u want this images as cover art' )
     path = location
-    img = ImageTk.PhotoImage(Image.open(path))
+    img = ImageTk.PhotoImage(Image.open(path).resize((300,300), Image.ANTIALIAS))
     panel = tk.Label(window, image = img)
     song_query_question = tk.Label(window,text='Enter text to search' )
     song_query = tk.Entry(window)
-    OK= tk.Button(window, text="Okay",command = add_image(location))
+    OK= tk.Button(window, text="Okay",command = add_image(location,audiofile))
     Cancel = tk.Button(window, text="Cancel")
     Next= tk.Button(window, text="Next",command = window.destroy)
     
@@ -28,8 +28,12 @@ def tkinter_window(location):
     
     window.mainloop()
 
-def add_image(location):
-    print('hello')
+def add_image(location,audiofile):
+    if (audiofile.tag == None):
+        audiofile.initTag()
+    print(audiofile.tag.album_artist)
+    audiofile.tag.images.set(3, open(location,'rb').read(), 'image/jpeg')
+    audiofile.tag.save()
 
 asps = []
 for root, dirs, files in os.walk(r'D:\\'):
@@ -80,6 +84,10 @@ for i in range(len(music_names)):
     audiofile = eyed3.load(music_names[i][1])
     song_file_name=scrape_image_from_google_images.scrape_google_image(music_names[i][0]+    \
                                                         " song cover art",name=music_names[i][0])
-    tkinter_window(song_file_name)
+    try:
+        Image.open(song_file_name)
+    except:
+        continue
+    tkinter_window(song_file_name,audiofile)
     
     
