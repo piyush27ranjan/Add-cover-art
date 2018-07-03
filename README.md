@@ -30,3 +30,6 @@ These instructions will help you run this application in your local machine.
  ```
  4. Press **OK** Button to set the image as the cover photo and then press **Next** Button to process another .mp3 file
  5. To close the application press **Cancel** Button and the give keyboared interupt by pressing **ctrl + C**
+
+## Sample
+![sample.gif](sample.gif)
