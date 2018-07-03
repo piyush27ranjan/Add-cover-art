@@ -40,3 +40,5 @@ These instructions will help you run this application in your local machine.
 
 ## Sample
 ![sample.gif](sample.gif)
+
+![sample.png](sample.png)
