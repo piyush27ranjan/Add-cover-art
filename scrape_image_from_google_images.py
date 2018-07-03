@@ -23,7 +23,7 @@ def scrape_google_image(query,num = 1,address = None, name = None):
          
             
     ActualImages = []
-    print("checking valit url")
+    print("checking valid url")
     for i in range(len(Images_Links)):
         if Images_Links[i][0].split(".")[-1] in ["png","jpeg","jpg"]:
             ActualImages.append(Images_Links[i][0])
