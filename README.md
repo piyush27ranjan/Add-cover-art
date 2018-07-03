@@ -15,11 +15,11 @@ This application will find all the .mp3 file in your computer and automatically 
 
 These instructions will help you run this application in your local machine.
 
-## Prerequisites
+### Prerequisites
 
 1. Python 3.x
 
-## Installing Packages
+### Installing Packages
 
 1. Fork it and then clone the repo using git clone or extract the downloaded zip file.
 2. You will have to install eyed3 module which will be used to edit .mp3 tags
