@@ -18,7 +18,7 @@ def tkinter_window(location,audiofile):
     OK= tk.Button(window, text="Okay",command = add_image(location,audiofile))
     Cancel = tk.Button(window, text="Cancel",command = window.destroy)
     Next= tk.Button(window, text="Next",command = window.destroy)
-    
+
     name.grid(column=0,row=0,columnspan=6)
     panel.grid(column=0,row=1,columnspan=3,rowspan =3)
     OK.grid(column=0,row=4,columnspan=2)
@@ -26,7 +26,7 @@ def tkinter_window(location,audiofile):
     song_query_question.grid(column=3,row=1,columnspan=3)
     song_query.grid(column=3,row=2,columnspan=3)
     Cancel.grid(column=4,row=4,columnspan=2)
-    
+
     window.mainloop()
 
 def add_image(location,audiofile):
@@ -35,22 +35,27 @@ def add_image(location,audiofile):
     print(audiofile.tag.album_artist)
     audiofile.tag.images.set(3, open(location,'rb').read(), 'image/jpeg')
     audiofile.tag.save()
-    
+
 print("Finding all .mp3 files")
 asps = []
-for root, dirs, files in os.walk(r'D:\\'):
+
+if(os.name == 'nt')
+	dir=r""'D:\\'""
+elif(os.name == 'posix')
+    dir='./'    #current dir of project
+for root, dirs, files in os.walk(dir):
     for file in files:
         if file.endswith('.mp3'):
             asps.append(os.path.join(root, file))
 
-print("All files found")    
-       #Get songs name with location 
+print("All files found")
+       #Get songs name with location
 music_names = []
 for i in range(len(asps)):
     music_names.append([])
     music_names[i].append(asps[i].split("\\")[-1])
     music_names[i].append(asps[i])
-    
+
 
       #Strip track no and numbers from the song names
 #Get list of numbers
@@ -64,10 +69,10 @@ for i in range(len(music_names)):
             music_names[i][0] = music_names[i][0][1:]
         else:
             break
-        
+
     #Remove extension from song names
 for i in range(len(music_names)):
-    music_names[i][0] = "".join(music_names[i][0].split('.')[:-1])     
+    music_names[i][0] = "".join(music_names[i][0].split('.')[:-1])
 
     #replace '-','_','320','Kbps','kbps' sign with ' '
 for i in range(len(music_names)):
@@ -76,9 +81,9 @@ for i in range(len(music_names)):
     music_names[i][0] = music_names[i][0].replace("320"," ")
     music_names[i][0] = music_names[i][0].replace("Kbps"," ")
     music_names[i][0] = music_names[i][0].replace("kbps"," ")
-        
+
     #remove anything in between (),[],{}
-import re 
+import re
 for i in range(len(music_names)):
     music_names[i][0] = re.sub("[\(\[].*?[\)\]]", "", music_names[i][0])
 
@@ -91,5 +96,3 @@ for i in range(len(music_names)):
     except:
         continue
     tkinter_window(song_file_name,audiofile)
-    
-    
