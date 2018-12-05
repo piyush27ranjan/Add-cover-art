@@ -39,9 +39,9 @@ def add_image(location,audiofile):
 print("Finding all .mp3 files")
 asps = []
 
-if(os.name == 'nt')
+if os.name == 'nt':
 	dir=r""'D:\\'""
-elif(os.name == 'posix')
+elif os.name == 'posix':
     dir='./'    #current dir of project
 for root, dirs, files in os.walk(dir):
     for file in files:
