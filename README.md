@@ -22,9 +22,9 @@ These instructions will help you run this application in your local machine.
 ### Installing Packages
 
 1. Fork it and then clone the repo using git clone or extract the downloaded zip file.
-2. You will have to install eyed3 module which will be used to edit .mp3 tags
+2. Run requirement.txt
 ```
-  pip install eyed3
+  pip install -r requirements.txt
 ```
 
 ## Deployment
