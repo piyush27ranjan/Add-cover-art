@@ -41,7 +41,7 @@ def add_image(location, audiofile):
     audiofile.tag.save()
 
 
-if __name__ == '__main':
+if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', nargs='?', default=os.getcwd())
