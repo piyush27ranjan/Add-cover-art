@@ -1,5 +1,6 @@
 import itertools
 
+import argparse
 import json
 import os
 import urllib.error
@@ -29,16 +30,20 @@ def scrape_google_image(query, max_num=1, name=None):
         extension = link.split(".")[-1]
         if extension in ["png", "jpeg", "jpg"]:
             try:
-                save_path = os.path.join(save_directory, str(n_images+1) + '.' + extension)
+                save_path = os.path.join(save_directory, str(n_images + 1) + '.' + extension)
                 urllib.request.urlretrieve(link, save_path)
-                print("Images Downloaded:", n_images+1)
+                print("Images Downloaded:", n_images + 1)
                 n_images += 1
             except urllib.error.HTTPError:
                 pass
     return save_directory
 
+
 if __name__ == '__main__':
-    keyword = input("Enter the keyword: ")
-    no = int(input("Enter no of images (max = 100): "))
-    file_name = input("Name of the file : ")
-    scrape_google_image(keyword, no, file_name)
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('keywords', nargs='+', help="Enter the keyword: ")
+    parser.add_argument('--filename', nargs='?', help="Name of the file (default:keyword)")
+    parser.add_argument('--max_num', nargs=1, default=10, help='Maximum number of images (default:10)')
+    args = parser.parse_args()
+    print('Images stored in:',
+          scrape_google_image(query=' '.join(args.keywords), max_num=args.max_num, name=args.filename))
