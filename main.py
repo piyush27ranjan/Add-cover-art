@@ -12,7 +12,7 @@ def tkinter_window(location, audiofile):
     window = tk.Tk()
     window.title("Add cover art")
     window.geometry("300x250")
-    name = tk.Label(window, text='Do u want this images as cover art')
+    name = tk.Label(window, text='Do you want this images as cover art')
     path = location
     img = ImageTk.PhotoImage(Image.open(path).resize((150, 150), Image.ANTIALIAS))
     panel = tk.Label(window, image=img)
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     music_names = []
     for i in range(len(asps)):
         music_names.append([])
-        music_names[i].append(asps[i].split("\\")[-1])
+        music_names[i].append(os.path.split(asps[i])[-1])
         music_names[i].append(asps[i])
 
     # Strip track no and numbers from the song names
@@ -95,8 +95,5 @@ if __name__ == '__main__':
         audiofile = eyed3.load(music_names[i][1])
         song_file_name = scrape_image_from_google_images.scrape_google_image(music_names[i][0] +
                                                                              " song cover art", name=music_names[i][0])
-        try:
-            Image.open(song_file_name)
-        except BaseException:
-            continue
+        Image.open(song_file_name)
         tkinter_window(song_file_name, audiofile)
