@@ -14,13 +14,13 @@ def get_soup(url):
     return BeautifulSoup(urllib.request.urlopen(urllib.request.Request(url, headers=header)), 'html.parser')
 
 
-def scrape_google_image(query, max_num=1, name=None):
+def scrape_google_image(query, max_num=1, name=None, search_engine='www.google.co.in'):
     if name is None:
         name = query
     save_directory = os.path.join("images", name)
     os.makedirs(save_directory, exist_ok=True)
     url_query = '+'.join(query.split())
-    url = r"https://www.google.co.in/search?q=" + url_query + "&source=lnms&tbm=isch"
+    url = r"https://%s/search?q=%s&source=lnms&tbm=isch" % (search_engine, url_query)
     soup = get_soup(url)
 
     print("Scraping for Images of", query)
@@ -40,8 +40,10 @@ def scrape_google_image(query, max_num=1, name=None):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='')
-    parser.add_argument('keywords', nargs='+', help="Enter the keyword: ")
+    parser = argparse.ArgumentParser(description='Scraper for images related to query')
+    parser.add_argument('keywords', nargs='+', help="Keywords")
+    parser.add_argument('--search-engine', nargs=1, default='www.google.co.in',
+                        help='search engine url (default:www.google.co.in)')
     parser.add_argument('--filename', nargs='?', help="Name of the file (default:keyword)")
     parser.add_argument('--max_num', nargs=1, default=10, help='Maximum number of images (default:10)')
     args = parser.parse_args()
