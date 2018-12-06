@@ -21,19 +21,18 @@ These instructions will help you run this application in your local machine.
 
 ### Installing Packages
 
-1. Fork it and then clone the repo using git clone or extract the downloaded zip file.
+1. Clone the repo using `git clone https://github.com/piyush27ranjan/Add-cover-art.git`  OR  Extract the downloaded zip file.
 2. Run requirement.txt
 ```
   pip install -r requirements.txt
 ```
 
-## Deployment
+## Usage and Deployment
 
-1. Run cmd
-2. cd into the file directory.
-3. Run
+1. Run terminal/ cmd
+2. Run
  ```
- python main.py
+ python main.py <directory to be processed>
  ```
  4. Press **OK** Button to set the image as the cover photo and then press **Next** Button to process another .mp3 file
  5. To close the application press **Cancel** Button and the give keyboared interupt by pressing **ctrl + C**
