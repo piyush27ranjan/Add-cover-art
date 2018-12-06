@@ -37,7 +37,6 @@ def scrape_google_image(query, max_num=1, name=None):
                 pass
     return save_directory
 
-
 if __name__ == '__main__':
     keyword = input("Enter the keyword: ")
     no = int(input("Enter no of images (max = 100): "))
