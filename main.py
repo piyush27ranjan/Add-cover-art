@@ -1,11 +1,20 @@
+"""
+Add Cover Art:
+This application will find the .mp3 files in your computer.
+Then it will automatically scrape a suitable cover from google images and apply
+it as a cover art to the mp3 file.
+"""
+
+
+
 import re
 import os
-import eyed3
+import argparse
+
 import scrape_image_from_google_images
 from PIL import ImageTk, Image
 import tkinter as tk
-import argparse
-
+import eyed3
 
 
 def tkinter_window(location, audiofile):
@@ -43,8 +52,9 @@ def add_image(location, audiofile):
 
 if __name__ == '__main__':
     
-    parser = argparse.ArgumentParser()
-    parser.add_argument('directory', nargs='?', default=os.getcwd())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('directory', nargs='?', default=os.getcwd(),
+                        help='Directory which is to be processed. (default: current directory)')
     args=parser.parse_args()
     
     print("Finding all .mp3 files in ",args.directory)
