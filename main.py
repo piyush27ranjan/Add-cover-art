@@ -5,8 +5,6 @@ Then it will automatically scrape a suitable cover from google images and apply
 it as a cover art to the mp3 file.
 """
 
-
-
 import re
 import os
 import argparse
@@ -21,7 +19,7 @@ def tkinter_window(location, audiofile):
     window = tk.Tk()
     window.title("Add cover art")
     window.geometry("300x250")
-    name = tk.Label(window, text='Do u want this images as cover art')
+    name = tk.Label(window, text='Do you want this images as cover art')
     path = location
     img = ImageTk.PhotoImage(Image.open(path).resize((150, 150), Image.ANTIALIAS))
     panel = tk.Label(window, image=img)
@@ -51,7 +49,7 @@ def add_image(location, audiofile):
 
 
 if __name__ == '__main__':
-    
+   
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('directory', nargs='?', default=os.getcwd(),
                         help='Directory which is to be processed. (default: current directory)')
@@ -69,7 +67,7 @@ if __name__ == '__main__':
     music_names = []
     for i in range(len(asps)):
         music_names.append([])
-        music_names[i].append(asps[i].split("\\")[-1])
+        music_names[i].append(os.path.split(asps[i])[-1])
         music_names[i].append(asps[i])
 
     # Strip track no and numbers from the song names
@@ -103,10 +101,8 @@ if __name__ == '__main__':
 
     for i in range(len(music_names)):
         audiofile = eyed3.load(music_names[i][1])
-        song_file_name = scrape_image_from_google_images.scrape_google_image(music_names[i][0] +
-                                                                             " song cover art", name=music_names[i][0])
-        try:
-            Image.open(song_file_name)
-        except BaseException:
-            continue
-        tkinter_window(song_file_name, audiofile)
+        song_directory = scrape_google_image(music_names[i][0] + " song cover art", name=music_names[i][0],
+                                             max_num=1)
+        song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
+        Image.open(song_filename)
+        tkinter_window(song_filename, audiofile)
