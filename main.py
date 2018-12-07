@@ -44,15 +44,19 @@ def add_image(location, audiofile):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('directory', nargs='?', default=os.getcwd())
+    parser.add_argument('file', nargs='?', default=os.getcwd())
     args=parser.parse_args()
     
-    print("Finding all .mp3 files in ",args.directory)
-    asps = []        
-    for root, dirs, files in os.walk(args.directory):
-        for file in files:
-            if file.endswith('.mp3'):
-                asps.append(os.path.join(root, file))
+    asps = [] 
+    if os.path.isdir(args.file):
+        print("Finding all .mp3 files in:",args.file)       
+        for root, dirs, files in os.walk(args.file):
+            for file in files:
+                if file.endswith('.mp3'):
+                    asps.append(os.path.join(root, file))
+    elif os.path.isfile(args.file) and args.file.endswith('.mp3'):
+        print("Finding:",args.file)
+        asps.append(os.path.abspath(args.file))
     print(len(asps),' Files Found, Processing...')
     
     # Get songs name with location
