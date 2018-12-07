@@ -1,11 +1,11 @@
-import re
-import os
-import eyed3
-import scrape_image_from_google_images
-from PIL import ImageTk, Image
-import tkinter as tk
 import argparse
+import eyed3
+import os
+import re
+import tkinter as tk
+from PIL import ImageTk, Image
 
+from scrape_image_from_google_images import scrape_google_image
 
 
 def tkinter_window(location, audiofile):
@@ -42,7 +42,7 @@ def add_image(location, audiofile):
 
 
 if __name__ == '__main__':
-    
+
     parser = argparse.ArgumentParser()
     parser.add_argument('directory', nargs='?', default=os.getcwd())
     args=parser.parse_args()
@@ -93,7 +93,8 @@ if __name__ == '__main__':
 
     for i in range(len(music_names)):
         audiofile = eyed3.load(music_names[i][1])
-        song_file_name = scrape_image_from_google_images.scrape_google_image(music_names[i][0] +
-                                                                             " song cover art", name=music_names[i][0])
-        Image.open(song_file_name)
-        tkinter_window(song_file_name, audiofile)
+        song_directory = scrape_google_image(music_names[i][0] + " song cover art", name=music_names[i][0],
+                                             max_num=1)
+        song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
+        Image.open(song_filename)
+        tkinter_window(song_filename, audiofile)
