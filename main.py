@@ -62,18 +62,9 @@ if __name__ == '__main__':
         music_names[i].append(os.path.split(asps[i])[-1])
         music_names[i].append(asps[i])
 
-    # Strip track no and numbers from the song names
-    # Get list of numbers
-    num = []
-    for i in range(10):
-        num.append(str(i))
-    num.append("-")
+    # Strip track no and numbers from the song names using lstrip
     for i in range(len(music_names)):
-        for a in music_names[i][0]:
-            if a in num:
-                music_names[i][0] = music_names[i][0][1:]
-            else:
-                break
+        music_names[i][0]=music_names[i][0].lstrip("0123456789.- ")
 
         # Remove extension from song names
     for i in range(len(music_names)):
@@ -83,13 +74,13 @@ if __name__ == '__main__':
     for i in range(len(music_names)):
         music_names[i][0] = music_names[i][0].replace("-", " ")
         music_names[i][0] = music_names[i][0].replace("_", " ")
-        music_names[i][0] = music_names[i][0].replace("320", " ")
-        music_names[i][0] = music_names[i][0].replace("Kbps", " ")
-        music_names[i][0] = music_names[i][0].replace("kbps", " ")
+        music_names[i][0] = re.sub("\d\d\d\s*kbps"," ", music_names[i][0], flags=re.I)
 
-        # remove anything in between (),[],{}
+        # remove anything in between (),[],{} and replace multiple spaces
     for i in range(len(music_names)):
         music_names[i][0] = re.sub(r"[\(\[].*?[\)\]]", "", music_names[i][0])
+        music_names[i][0] = re.sub(" +"," ", music_names[i][0])
+    
 
     for i in range(len(music_names)):
         audiofile = eyed3.load(music_names[i][1])
