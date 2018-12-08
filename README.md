@@ -17,22 +17,46 @@ These instructions will help you run this application in your local machine.
 
 ### Prerequisites
 
-1. Python 3.x
+As the script is written in python, you need to download Python on your system, specifically *Python 3.x* or latest. Its installer can be downloaded from [here](https://www.python.org/downloads/).
 
 ### Installing Packages
 
-1. Clone the repo using `git clone https://github.com/piyush27ranjan/Add-cover-art.git`  OR  Extract the downloaded zip file.
-2. Run requirement.txt
+
+1. Fork this repository and then clone the repository to your local system using `git clone` or extract the *downloaded zip file*.
+
+![clone/download](snap.png)
+
+<hr>
+
+2. Run ***requirement.txt*** on command prompt/shell using pip
+
 ```
   pip install -r requirements.txt
+```
+3. Install the following modules using pip
+
+```
+  pip install python-magic-bin
+```
+
+if error related to *image* or *ImageTk* still persists, run the following commands:
+
+```
+  pip install image
+````
+
+For *Linux* systems, run the given command on shell:
+```
+  sudo apt-get install python3-pil.imagetk
 ```
 
 ## Usage and Deployment
 
-1. Run terminal/ cmd
-2. Run
+1. Run *command prompt* or *linux shell*
+2. Change directory into the directory containing the `.mp3` files
+3. Run the script
  ```
- python main.py <directory to be processed>
+  python main.py 
  ```
  4. Press **OK** Button to set the image as the cover photo and then press **Next** Button to process another .mp3 file
  5. To close the application press **Cancel** Button and the give keyboared interupt by pressing **ctrl + C**
