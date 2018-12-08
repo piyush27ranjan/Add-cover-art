@@ -1,5 +1,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
-images
 .idea
+.DS_Store
+Thumbs.db
+.ipynb_checkpoints
+*.sublime-*
+*.tmproj
+
+images
