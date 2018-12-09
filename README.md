@@ -21,6 +21,7 @@ As the script is written in python, you need to download Python on your system, 
 
 ### Installing Packages
 
+
 1. Fork this repository and then clone the repository to your local system using `git clone` or extract the *downloaded zip file*.
 
 ![clone/download](snap.png)
@@ -28,6 +29,7 @@ As the script is written in python, you need to download Python on your system, 
 <hr>
 
 2. Run ***requirement.txt*** on command prompt/shell using pip
+
 ```
   pip install -r requirements.txt
 ```
@@ -48,13 +50,13 @@ For *Linux* systems, run the given command on shell:
   sudo apt-get install python3-pil.imagetk
 ```
 
-## Deployment
+## Usage and Deployment
 
 1. Run *command prompt* or *linux shell*
 2. Change directory into the directory containing the `.mp3` files
 3. Run the script
  ```
-  python main.py
+  python main.py 
  ```
  4. Press **OK** Button to set the image as the cover photo and then press **Next** Button to process another .mp3 file
  5. To close the application press **Cancel** Button and the give keyboared interupt by pressing **ctrl + C**
