@@ -49,9 +49,11 @@ def add_image(location, audiofile):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('directory', nargs='?', default=os.getcwd(),
-                        help='Directory which is to be processed. (default: current directory)')
+
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('file', nargs='?', default=os.getcwd())
+    parser.add_argument('--no-gui', action='store_true',help='dont use a gui, automatically add cover art')
     args=parser.parse_args()
     
     asps = [] 
@@ -99,4 +101,7 @@ if __name__ == '__main__':
                                              max_num=1)
         song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
         Image.open(song_filename)
-        tkinter_window(song_filename, audiofile)
+        if args.no_gui:
+            add_image(song_filename,audiofile)
+        else:
+            tkinter_window(song_filename, audiofile)
