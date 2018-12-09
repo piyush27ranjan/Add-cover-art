@@ -3,7 +3,6 @@ import itertools
 import argparse
 import json
 import os
-import urllib.error
 import urllib.request
 from bs4 import BeautifulSoup
 
@@ -29,13 +28,10 @@ def scrape_google_image(query, max_num=1, name=None, search_engine='www.google.c
         link = json.loads(element.text)["ou"]
         extension = link.split(".")[-1]
         if extension in ["png", "jpeg", "jpg"]:
-            try:
-                save_path = os.path.join(save_directory, str(n_images + 1) + '.' + extension)
-                urllib.request.urlretrieve(link, save_path)
-                print("Images Downloaded:", n_images + 1)
-                n_images += 1
-            except urllib.error.HTTPError:
-                pass
+            save_path = os.path.join(save_directory, str(n_images + 1) + '.' + extension)
+            urllib.request.urlretrieve(link, save_path)
+            print("Images Downloaded:", n_images + 1)
+            n_images += 1
     return save_directory
 
 
