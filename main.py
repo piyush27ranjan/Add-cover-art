@@ -9,7 +9,7 @@ import re
 import os
 import argparse
 
-import scrape_image_from_google_images
+from scrape_image_from_google_images import scrape_google_image
 from PIL import ImageTk, Image
 import tkinter as tk
 import eyed3
