@@ -18,6 +18,11 @@ These instructions will help you run this application in your local machine.
 ### Prerequisites
 
 As the script is written in python, you need to download Python on your system, specifically *Python 3.x* or latest. Its installer can be downloaded from [here](https://www.python.org/downloads/).
+Linux Users:
+  Open Terminal and type 
+  """
+  sudo apt-get install python3.6
+  """
 
 ### Installing Packages
 
@@ -56,7 +61,10 @@ For *Linux* systems, run the given command on shell:
 2. Change directory into the directory containing the `.mp3` files
 3. Run the script
  ```
-  python main.py 
+  #For Windows
+  python main.py
+  #For Linux
+  python3 main.py
  ```
  4. Press **OK** Button to set the image as the cover photo and then press **Next** Button to process another .mp3 file
  5. To close the application press **Cancel** Button and the give keyboared interupt by pressing **ctrl + C**
