@@ -54,6 +54,9 @@ For *Linux* systems, run the given command on shell:
 ```
   sudo apt-get install python3-pil.imagetk
 ```
+## Creating Virtual Environment
+To activate this project's virtualenv, run "pipenv shell".
+Alternatively, run a command inside the virtualenv with "pipenv run".
 
 ## Usage and Deployment
 
