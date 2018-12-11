@@ -8,10 +8,11 @@ it as a cover art to the mp3 file.
 import re
 import os
 import argparse
-
-import scrape_image_from_google_images
-from PIL import ImageTk, Image
+from urllib.error import HTTPError,URLError
 import tkinter as tk
+
+from scrape_image_from_google_images import scrape_google_image
+from PIL import ImageTk, Image
 import eyed3
 
 
@@ -55,10 +56,10 @@ if __name__ == '__main__':
     parser.add_argument('file', nargs='?', default=os.getcwd())
     parser.add_argument('--no-gui', action='store_true',help='dont use a gui, automatically add cover art')
     args=parser.parse_args()
-    
-    asps = [] 
+
+    asps = []
     if os.path.isdir(args.file):
-        print("Finding all .mp3 files in:",args.file)       
+        print("Finding all .mp3 files in:",args.file)
         for root, dirs, files in os.walk(args.file):
             for file in files:
                 if file.endswith('.mp3'):
@@ -67,7 +68,7 @@ if __name__ == '__main__':
         print("Finding:",args.file)
         asps.append(os.path.abspath(args.file))
     print(len(asps),' Files Found, Processing...')
-    
+
     # Get songs name with location
     music_names = []
     for i in range(len(asps)):
@@ -93,12 +94,16 @@ if __name__ == '__main__':
     for i in range(len(music_names)):
         music_names[i][0] = re.sub(r"[\(\[].*?[\)\]]", "", music_names[i][0])
         music_names[i][0] = re.sub(" +"," ", music_names[i][0])
-    
+
 
     for i in range(len(music_names)):
         audiofile = eyed3.load(music_names[i][1])
-        song_directory = scrape_google_image(music_names[i][0] + " song cover art", name=music_names[i][0],
+        try:
+            song_directory = scrape_google_image(music_names[i][0] + " song cover art", name=music_names[i][0],
                                              max_num=1)
+        except (HTTPError,URLError):
+            print ('Unable to Download the images')
+            continue
         song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
         Image.open(song_filename)
         if args.no_gui:
