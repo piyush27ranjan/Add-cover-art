@@ -15,8 +15,13 @@ from scrape_image_from_google_images import scrape_google_image
 from PIL import ImageTk, Image
 import eyed3
 
+    
 
 def tkinter_window(location, audiofile):
+    inputs={}
+    def get_entry():
+        inputs['song_query']=song_query.get()
+        window.destroy()
     window = tk.Tk()
     window.title("Add cover art")
     window.geometry("300x250")
@@ -27,18 +32,22 @@ def tkinter_window(location, audiofile):
     song_query_question = tk.Label(window, text='Enter text to search')
     song_query = tk.Entry(window)
     OK = tk.Button(window, text="Okay", command=add_image(location, audiofile))
+
     Cancel = tk.Button(window, text="Cancel", command=window.destroy)
-    Next = tk.Button(window, text="Next", command=window.destroy)
+    Search = tk.Button(window, text="Search", command=get_entry)
 
     name.grid(column=0, row=0, columnspan=6)
     panel.grid(column=0, row=1, columnspan=3, rowspan=3)
     OK.grid(column=0, row=4, columnspan=2)
-    Next.grid(column=2, row=4)
+    Search.grid(column=2, row=4)
     song_query_question.grid(column=3, row=1, columnspan=3)
     song_query.grid(column=3, row=2, columnspan=3)
     Cancel.grid(column=4, row=4, columnspan=2)
 
     window.mainloop()
+
+
+    return inputs
 
 
 def add_image(location, audiofile):
@@ -109,4 +118,16 @@ if __name__ == '__main__':
         if args.no_gui:
             add_image(song_filename,audiofile)
         else:
-            tkinter_window(song_filename, audiofile)
+            while True:
+                inputs=tkinter_window(song_filename, audiofile)
+                if inputs:
+                    try:
+                        song_directory = scrape_google_image(inputs['song_query'] + " song cover art", name=inputs['song_query'] ,
+                                                        max_num=1)
+                    except (HTTPError,URLError):
+                        print ('Unable to Download the images')
+                        continue
+                    song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
+                else:
+                    break
+                    
