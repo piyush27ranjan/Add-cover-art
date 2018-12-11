@@ -44,4 +44,4 @@ if __name__ == '__main__':
     parser.add_argument('--max_num', nargs=1, default=10, help='Maximum number of images (default:10)')
     args = parser.parse_args()
     print('Images stored in:',
-          scrape_google_image(query=' '.join(args.keywords), max_num=args.max_num, name=args.filename))
+scrape_google_image(query=' '.join(args.keywords), max_num=args.max_num, name=args.filename))
