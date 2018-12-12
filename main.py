@@ -69,47 +69,50 @@ def extract_query(file_path):
     return song_name
 
 
-if __name__ == '__main__':
-
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('file', nargs='?', default=os.getcwd(),help='file or directory to be processed (default: current directory)')
-    parser.add_argument('--no-gui', action='store_true',help='dont use a gui, automatically add cover art')
-    args=parser.parse_args()
-
+def add_cover_art(path='.',no_gui=False,max_num=1):
     song_paths = []
-    if os.path.isdir(args.file):
-        print("Finding all .mp3 files in:", args.file)
-        for root, dirs, files in os.walk(args.file):
+    if os.path.isdir(path):
+        print("Finding all .mp3 files in:", path)
+        for root, dirs, files in os.walk(path):
             for file in files:
                 if file.endswith('.mp3'):
                     song_paths.append(os.path.join(root, file))
-    elif os.path.isfile(args.file) and args.file.endswith('.mp3'):
-        print("Finding:", args.file)
-        song_paths.append(os.path.abspath(args.file))
+    elif os.path.isfile(path) and args.file.endswith('.mp3'):
+        print("Finding:", path)
+        song_paths.append(os.path.abspath(path))
 
     for song_path in song_paths:
         audiofile = eyed3.load(song_path)
         song_query = extract_query(song_path)
         try:
-            song_directory = scrape_google_image(song_query+" song cover art", name=song_query,max_num=1)
+            song_directory = scrape_google_image(song_query+" song cover art", name=song_query,max_num=max_num)
+            song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
+            while not no_gui:
+                command=tkinter_window(song_filename, audiofile)
+                if command[0]
+                song_directory = scrape_google_image(song_query+" song cover art", name=song_query,max_num=max_num)
+                song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
+                
         except (HTTPError,URLError):
             print ('Unable to Download the images')
             continue
-        song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
-        Image.open(song_filename)
         if args.no_gui:
             add_image(song_filename,audiofile)
         else:
             while True:
-                inputs=tkinter_window(song_filename, audiofile)
-                if inputs:
-                    try:
-                        song_directory = scrape_google_image(inputs['song_query'] + " song cover art", name=inputs['song_query'] ,
-                                                        max_num=1)
-                    except (HTTPError,URLError):
-                        print ('Unable to Download the images')
-                        continue
+                inputs=
+
                     song_filename = os.path.join(song_directory, os.listdir(song_directory)[0])
                 else:
                     break
-                    
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('path', nargs='?', default=os.getcwd(),help='file or directory to be processed (default: current directory)')
+    parser.add_argument('--no-gui', action='store_true',help='dont use a gui, automatically add cover art')
+    args=parser.parse_args()
+
+    add_cover_art(file=args.file,no_gui=args.no_gui)
+         
