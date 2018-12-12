@@ -20,9 +20,9 @@ These instructions will help you run this application in your local machine.
 As the script is written in python, you need to download Python on your system, specifically *Python 3.x* or latest. Its installer can be downloaded from [here](https://www.python.org/downloads/).
 Linux Users:
   Open Terminal and type 
-  """
+  ```
   sudo apt-get install python3.6
-  """
+  ```
 
 ### Installing Packages
 
@@ -33,7 +33,7 @@ Linux Users:
 
 <hr>
 
-2. Run ***requirement.txt*** on command prompt/shell using pip
+2. Run ***requirements.txt*** on command prompt/shell using pip
 
 ```
   pip install -r requirements.txt
@@ -59,18 +59,21 @@ To activate this project's virtualenv, run "pipenv shell".
 Alternatively, run a command inside the virtualenv with "pipenv run".
 
 ## Usage and Deployment
+```
+usage: python3 main.py [-h] [--no-gui] [file]   # Use python main.py on Windows
 
+positional arguments:
+  file        file or directory to be processed (default: current directory)
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --no-gui    dont use a gui, automatically add cover art
+```
 1. Run *command prompt* or *linux shell*
 2. Change directory into the directory containing the `.mp3` files
 3. Run the script
- ```
-  #For Windows
-  python main.py
-  #For Linux
-  python3 main.py
- ```
- 4. Press **OK** Button to set the image as the cover photo and then press **Next** Button to process another .mp3 file
- 5. To close the application press **Cancel** Button and the give keyboared interupt by pressing **ctrl + C**
+4. Press **OK** Button to set the image as the cover photo and then press **Next** Button to process another .mp3 file
+5. To close the application press **Cancel** Button and the give keyboared interupt by pressing **ctrl + C**
 
 ## Sample
 ![sample.gif](sample.gif)
