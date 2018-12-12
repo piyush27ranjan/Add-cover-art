@@ -66,24 +66,23 @@ if __name__ == '__main__':
     parser.add_argument('--no-gui', action='store_true',help='dont use a gui, automatically add cover art')
     args=parser.parse_args()
 
-    asps = []
+    song_paths = []
     if os.path.isdir(args.file):
-        print("Finding all .mp3 files in:",args.file)
+        print("Finding all .mp3 files in:", args.file)
         for root, dirs, files in os.walk(args.file):
             for file in files:
                 if file.endswith('.mp3'):
-                    asps.append(os.path.join(root, file))
+                    song_paths.append(os.path.join(root, args.file))
     elif os.path.isfile(args.file) and args.file.endswith('.mp3'):
-        print("Finding:",args.file)
-        asps.append(os.path.abspath(args.file))
-    print(len(asps),' Files Found, Processing...')
+        print("Finding:", args.file)
+        song_paths.append(os.path.abspath(args.file))
 
     # Get songs name with location
     music_names = []
-    for i in range(len(asps)):
+    for i in range(len(song_paths)):
         music_names.append([])
-        music_names[i].append(os.path.split(asps[i])[-1])
-        music_names[i].append(asps[i])
+        music_names[i].append(os.path.split(song_paths[i])[-1])
+        music_names[i].append(song_paths[i])
 
     # Strip track no and numbers from the song names using lstrip
     for i in range(len(music_names)):
