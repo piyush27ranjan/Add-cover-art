@@ -71,9 +71,8 @@ def extract_query(file_path):
 
 if __name__ == '__main__':
 
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('file', nargs='?', default=os.getcwd())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('file', nargs='?', default=os.getcwd(),help='file or directory to be processed (default: current directory)')
     parser.add_argument('--no-gui', action='store_true',help='dont use a gui, automatically add cover art')
     args=parser.parse_args()
 
