@@ -19,6 +19,7 @@ from scrape_image_from_google_images import scrape_google_image
 logging.basicConfig(level=logging.VERBOSE, format='%(message)s')
 logging.getLogger().setLevel(logging.VERBOSE)
 
+__all__ = ('add_cover_art','add_image')
 
 class tkinter_window:
     is_cancelled = False
