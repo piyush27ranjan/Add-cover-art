@@ -62,14 +62,19 @@ Alternatively, run a command inside the virtualenv with "pipenv run".
 
 ## Usage and Deployment
 ```
-usage: python3 main.py [-h] [--no-gui] [file]   # Use python main.py on Windows
+usage: main.py [-h] [--no-gui] [--silent] [path]
+
+Add Cover Art: This application will find the .mp3 files in your computer.
+Then it will automatically scrape a suitable cover from google images and
+apply it as a cover art to the mp3 file.
 
 positional arguments:
-  file        file or directory to be processed (default: current directory)
+  path        file or directory to be processed (default: current directory)
 
 optional arguments:
   -h, --help  show this help message and exit
-  --no-gui    dont use a gui, automatically add cover art
+  --no-gui    don't use a gui, automatically add cover art
+  --silent    don't show console output
 ```
 1. Run *command prompt* or *linux shell*
 2. Change directory into the directory containing the `.mp3` files
