@@ -40,7 +40,7 @@ class tkinter_window:
         song_query_question = tk.Label(self.window, text='Enter text to search')
         self.song_query = tk.Entry(self.window)
 
-        search_button = tk.Button(self.window, text="Search", command=self.on_search)
+        self.search_button = tk.Button(self.window, text="  Search  ", command=self.on_search)
         apply_button = tk.Button(self.window, text="Apply", command=self.on_apply)
         next_button = tk.Button(self.window, text="Next", command=self.on_next)
         cancel_button = tk.Button(self.window, text="Cancel", command=self.on_cancel)
@@ -50,7 +50,7 @@ class tkinter_window:
         song_query_question.grid(column=3, row=3, columnspan=4, rowspan=1)
         self.song_query.grid(column=3, row=4, columnspan=4, rowspan=1)
 
-        search_button.grid(column=4, row=5, columnspan=4, rowspan=1)
+        self.search_button.grid(column=4, row=5, columnspan=4, rowspan=1)
         apply_button.grid(column=1, row=6, columnspan=1)
         next_button.grid(column=4, row=6)
         cancel_button.grid(column=5, row=6)
@@ -63,10 +63,13 @@ class tkinter_window:
         self.image_panel.image = image
 
     def on_search(self):
+        self.search_button.configure(state='disabled', text='Searching..')
+        self.window.update()
         song_query = self.song_query.get()
         art_directory = scrape_google_image(song_query + " song cover art", name=song_query, max_num=1)
         self.art_filename = os.path.join(art_directory, os.listdir(art_directory)[0])
         self.update_image()
+        self.search_button.configure(state='normal', text='Search')
 
     def on_cancel(self):
         self.is_cancelled = True
