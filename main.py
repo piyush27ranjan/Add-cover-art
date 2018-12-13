@@ -26,6 +26,7 @@ class tkinter_window:
         self.window = tk.Tk()
         self.window.title("Add cover art")
         self.window.geometry("300x200")
+        self.window.protocol("WM_DELETE_WINDOW", self.on_cancel)
 
         heading = tk.Label(self.window, text='Do you want this image as cover art?')
         self.image_panel = tk.Label(self.window)
