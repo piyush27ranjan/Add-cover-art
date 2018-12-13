@@ -74,12 +74,14 @@ class tkinter_window:
         self.window.destroy()
 
 
-def add_image(song_filename, song_path):
-    audiofile = eyed3.load(song_path)
+def add_image(art_filename, song_filename):
+    print("Adding cover art:",song_filename)
+    audiofile = eyed3.load(song_filename)
     if audiofile.tag is None:
         audiofile.initTag()
-    print(audiofile.tag.album_artist)
-    audiofile.tag.images.set(3, open(song_filename, 'rb').read(), 'image/jpeg')
+    elif audiofile.tag.album_artist:
+        print(audiofile.tag.album_artist)
+    audiofile.tag.images.set(3, open(art_filename, 'rb').read(), 'image/jpeg')
     audiofile.tag.save()
 
 
@@ -107,6 +109,7 @@ def add_cover_art(path='.', no_gui=False, max_num=1):
         song_filenames.append(os.path.abspath(path))
 
     for song_filename in song_filenames:
+        print("Processing file:",song_filename)
         song_query = extract_query(song_filename)
         try:
             art_directory = scrape_google_image(song_query + " song cover art", name=song_query, max_num=1)
@@ -117,8 +120,8 @@ def add_cover_art(path='.', no_gui=False, max_num=1):
                     exit()
             else:
                 add_image(art_filename, song_filename)
-        except (HTTPError, URLError, ValueError):
-            print('Unable to Download the images')
+        except (HTTPError, URLError, ValueError) as e:
+            print('Unable to download images:',e)
 
 
 if __name__ == '__main__':

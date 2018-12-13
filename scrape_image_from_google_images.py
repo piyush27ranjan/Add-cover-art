@@ -20,9 +20,9 @@ def scrape_google_image(query, max_num=1, name=None, search_engine='www.google.c
     os.makedirs(save_directory, exist_ok=True)
     url_query = '+'.join(query.split())
     url = r"https://%s/search?q=%s&source=lnms&tbm=isch" % (search_engine, url_query)
+    print("Scraping for query:", query)
     soup = get_soup(url)
-
-    print("Scraping for Images of", query)
+    
     n_images = 0
     for element in itertools.takewhile(lambda _: n_images < max_num, soup.find_all("div", {"class": "rg_meta"})):
         link = json.loads(element.text)["ou"]
@@ -30,10 +30,10 @@ def scrape_google_image(query, max_num=1, name=None, search_engine='www.google.c
         if extension in ["png", "jpeg", "jpg"]:
             save_path = os.path.join(save_directory, str(n_images + 1) + '.' + extension)
             urllib.request.urlretrieve(link, save_path)
-            print("Images Downloaded:", n_images + 1)
+            print("Images downloaded:", n_images + 1)
             n_images += 1
     if n_images < 1:
-        raise ValueError("No Images Downloaded")
+        raise ValueError("No images downloaded")
     return save_directory
 
 
