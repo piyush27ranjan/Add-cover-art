@@ -9,6 +9,7 @@ verify_ssl = true
 pillow = "==5.3.0"
 beautifulsoup4 = "==4.6.3"
 eyed3 = "==0.8.8"
+tkinter = "==8.6"
 
 [requires]
-python_version = "2.7"
+python_version = "3.6"
