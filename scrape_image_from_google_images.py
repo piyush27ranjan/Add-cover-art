@@ -2,6 +2,7 @@ import itertools
 
 import argparse
 import json
+import logging
 import os
 import urllib.request
 from bs4 import BeautifulSoup
@@ -20,9 +21,9 @@ def scrape_google_image(query, max_num=1, name=None, search_engine='www.google.c
     os.makedirs(save_directory, exist_ok=True)
     url_query = '+'.join(query.split())
     url = r"https://%s/search?q=%s&source=lnms&tbm=isch" % (search_engine, url_query)
-    print("Scraping for query:", query)
+    logging.debug("Scraping for query: %s", query)
     soup = get_soup(url)
-    
+
     n_images = 0
     for element in itertools.takewhile(lambda _: n_images < max_num, soup.find_all("div", {"class": "rg_meta"})):
         link = json.loads(element.text)["ou"]
@@ -30,7 +31,7 @@ def scrape_google_image(query, max_num=1, name=None, search_engine='www.google.c
         if extension in ["png", "jpeg", "jpg"]:
             save_path = os.path.join(save_directory, str(n_images + 1) + '.' + extension)
             urllib.request.urlretrieve(link, save_path)
-            print("Images downloaded:", n_images + 1)
+            logging.debug("Images downloaded: %s", n_images + 1)
             n_images += 1
     if n_images < 1:
         raise ValueError("No images downloaded")
@@ -46,4 +47,4 @@ if __name__ == '__main__':
     parser.add_argument('--max_num', nargs=1, default=10, help='Maximum number of images (default:10)')
     args = parser.parse_args()
     print('Images stored in:',
-scrape_google_image(query=' '.join(args.keywords), max_num=args.max_num, name=args.filename))
+          scrape_google_image(query=' '.join(args.keywords), max_num=args.max_num, name=args.filename))

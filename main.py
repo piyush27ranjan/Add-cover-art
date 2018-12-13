@@ -7,6 +7,7 @@ it as a cover art to the mp3 file.
 
 import argparse
 import eyed3
+import logging
 import os
 import re
 import tkinter as tk
@@ -14,6 +15,9 @@ from PIL import ImageTk, Image
 from urllib.error import HTTPError, URLError
 
 from scrape_image_from_google_images import scrape_google_image
+
+logging.basicConfig(level=logging.VERBOSE, format='%(message)s')
+logging.getLogger().setLevel(logging.VERBOSE)
 
 
 class tkinter_window:
@@ -28,7 +32,8 @@ class tkinter_window:
         self.window.geometry("300x210")
         self.window.protocol("WM_DELETE_WINDOW", self.on_cancel)
 
-        heading = tk.Label(self.window, text='Do you want this image as cover art?\n' + os.path.split(self.song_filename)[-1])
+        heading = tk.Label(self.window,
+                           text='Do you want this image as cover art?\n' + os.path.split(self.song_filename)[-1])
         self.image_panel = tk.Label(self.window)
         self.update_image()
 
@@ -40,7 +45,7 @@ class tkinter_window:
         next_button = tk.Button(self.window, text="Next", command=self.on_next)
         cancel_button = tk.Button(self.window, text="Cancel", command=self.on_cancel)
 
-        heading.grid(column=0, row=0, columnspan=6,rowspan=2)
+        heading.grid(column=0, row=0, columnspan=6, rowspan=2)
         self.image_panel.grid(column=0, row=3, columnspan=3, rowspan=3)
         song_query_question.grid(column=3, row=3, columnspan=4, rowspan=1)
         self.song_query.grid(column=3, row=4, columnspan=4, rowspan=1)
@@ -75,12 +80,12 @@ class tkinter_window:
 
 
 def add_image(art_filename, song_filename):
-    print("Adding cover art:",song_filename)
+    logging.log(logging.VERBOSE, "Adding cover art: %s", song_filename)
     audiofile = eyed3.load(song_filename)
     if audiofile.tag is None:
         audiofile.initTag()
     elif audiofile.tag.album_artist:
-        print(audiofile.tag.album_artist)
+        logging.log(logging.VERBOSE, 'Artist: %s', audiofile.tag.album_artist)
     audiofile.tag.images.set(3, open(art_filename, 'rb').read(), 'image/jpeg')
     audiofile.tag.save()
 
@@ -99,17 +104,17 @@ def extract_query(file_path):
 def add_cover_art(path='.', no_gui=False, max_num=1):
     song_filenames = []
     if os.path.isdir(path):
-        print("Finding all .mp3 files in:", path)
+        logging.log(logging.VERBOSE, "Finding all .mp3 files in: %s", path)
         for root, dirs, files in os.walk(path):
             for file in files:
                 if file.endswith('.mp3'):
                     song_filenames.append(os.path.join(root, file))
     elif os.path.isfile(path) and args.file.endswith('.mp3'):
-        print("Finding:", path)
+        logging.log(logging.VERBOSE, "Finding: %s", path)
         song_filenames.append(os.path.abspath(path))
 
     for song_filename in song_filenames:
-        print("Processing file:",song_filename)
+        logging.log(logging.VERBOSE, "Processing file: %s", song_filename)
         song_query = extract_query(song_filename)
         try:
             art_directory = scrape_google_image(song_query + " song cover art", name=song_query, max_num=1)
@@ -121,14 +126,17 @@ def add_cover_art(path='.', no_gui=False, max_num=1):
             else:
                 add_image(art_filename, song_filename)
         except (HTTPError, URLError, ValueError) as e:
-            print('Unable to download images:',e)
+            logging.warning('Unable to download images: %s', e)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('path', nargs='?', default=os.getcwd(),
                         help='file or directory to be processed (default: current directory)')
-    parser.add_argument('--no-gui', action='store_true', help='dont use a gui, automatically add cover art')
+    parser.add_argument('--no-gui', action='store_true', help="don't use a gui, automatically add cover art")
+    parser.add_argument('--silent', action='store_true', help="don't show console output")
     args = parser.parse_args()
 
+    if args.silent:
+        logging.disable()
     add_cover_art(path=args.path, no_gui=args.no_gui)
