@@ -25,10 +25,10 @@ class tkinter_window:
 
         self.window = tk.Tk()
         self.window.title("Add cover art")
-        self.window.geometry("300x200")
+        self.window.geometry("300x210")
         self.window.protocol("WM_DELETE_WINDOW", self.on_cancel)
 
-        heading = tk.Label(self.window, text='Do you want this image as cover art?')
+        heading = tk.Label(self.window, text='Do you want this image as cover art?\n' + os.path.split(self.song_filename)[-1])
         self.image_panel = tk.Label(self.window)
         self.update_image()
 
@@ -40,15 +40,15 @@ class tkinter_window:
         next_button = tk.Button(self.window, text="Next", command=self.on_next)
         cancel_button = tk.Button(self.window, text="Cancel", command=self.on_cancel)
 
-        heading.grid(column=0, row=0, columnspan=6)
-        self.image_panel.grid(column=0, row=1, columnspan=3, rowspan=3)
-        song_query_question.grid(column=3, row=1, columnspan=4, rowspan=1)
-        self.song_query.grid(column=3, row=2, columnspan=4, rowspan=1)
+        heading.grid(column=0, row=0, columnspan=6,rowspan=2)
+        self.image_panel.grid(column=0, row=3, columnspan=3, rowspan=3)
+        song_query_question.grid(column=3, row=3, columnspan=4, rowspan=1)
+        self.song_query.grid(column=3, row=4, columnspan=4, rowspan=1)
 
-        search_button.grid(column=4, row=3, columnspan=4, rowspan=1)
-        apply_button.grid(column=1, row=4, columnspan=1)
-        next_button.grid(column=4, row=4, )
-        cancel_button.grid(column=5, row=4)
+        search_button.grid(column=4, row=5, columnspan=4, rowspan=1)
+        apply_button.grid(column=1, row=6, columnspan=1)
+        next_button.grid(column=4, row=6)
+        cancel_button.grid(column=5, row=6)
 
         self.window.mainloop()
 
