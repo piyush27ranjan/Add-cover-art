@@ -32,6 +32,8 @@ def scrape_google_image(query, max_num=1, name=None, search_engine='www.google.c
             urllib.request.urlretrieve(link, save_path)
             print("Images Downloaded:", n_images + 1)
             n_images += 1
+    if n_images < 1:
+        raise ValueError("No Images Downloaded")
     return save_directory
 
 
