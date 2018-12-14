@@ -79,8 +79,10 @@ optional arguments:
 1. Run *command prompt* or *linux shell*
 2. Change directory into the directory containing the `.mp3` files
 3. Run the script
-4. Press **OK** Button to set the image as the cover photo and then press **Next** Button to process another .mp3 file
-5. To close the application press **Cancel** Button and the give keyboared interupt by pressing **ctrl + C**
+4. Press **Apply** Button to set the image as the cover photo if you like it.
+5. Press **Next** Button to process another .mp3 file
+6. Press **Cancel** Button to close the application.
+7. If you are unhappy with the image suggested, enter your own query into the search box and press **Search**
 
 ## Sample
 ![sample.gif](sample.gif)
