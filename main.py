@@ -7,6 +7,7 @@ it as a cover art to the mp3 file.
 
 import argparse
 import eyed3
+import io
 import logging
 import os
 import re
@@ -14,19 +15,21 @@ import tkinter as tk
 from PIL import ImageTk, Image
 from urllib.error import HTTPError, URLError
 
-from scrape_image_from_google_images import scrape_google_image
+from scrape_image_from_google_images import scrape_google_image_on_demand
 
 logging.basicConfig(level=logging.VERBOSE, format='%(message)s')
 logging.getLogger().setLevel(logging.VERBOSE)
 
-__all__ = ('add_cover_art','add_image')
+__all__ = ('add_cover_art', 'add_image')
+
 
 class tkinter_window:
     is_cancelled = False
 
-    def __init__(self, art_filename, song_filename):
+    def __init__(self, art_images, song_filename):
         self.song_filename = song_filename
-        self.art_filename = art_filename
+        self.art_images = art_images
+        self.current_art_image = next(art_images)
 
         self.window = tk.Tk()
         self.window.title("Add cover art")
@@ -59,7 +62,7 @@ class tkinter_window:
         self.window.mainloop()
 
     def update_image(self):
-        image = ImageTk.PhotoImage(Image.open(self.art_filename).resize((150, 150), Image.ANTIALIAS))
+        image = ImageTk.PhotoImage(Image.open(io.BytesIO(self.current_art_image)).resize((150, 150), Image.ANTIALIAS))
         self.image_panel.configure(image=image)
         self.image_panel.image = image
 
@@ -67,8 +70,8 @@ class tkinter_window:
         self.search_button.configure(state='disabled', text='Searching..')
         self.window.update()
         song_query = self.song_query.get()
-        art_directory = scrape_google_image(song_query + " song cover art", name=song_query, max_num=1)
-        self.art_filename = os.path.join(art_directory, os.listdir(art_directory)[0])
+        self.art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=1)
+        self.current_art_image = next(self.art_images)
         self.update_image()
         self.search_button.configure(state='normal', text='Search')
 
@@ -77,20 +80,20 @@ class tkinter_window:
         self.window.destroy()
 
     def on_apply(self):
-        add_image(self.art_filename, self.song_filename)
+        add_image(self.current_art_image, self.song_filename)
 
     def on_next(self):
         self.window.destroy()
 
 
-def add_image(art_filename, song_filename):
+def add_image(art_image, song_filename):
     logging.log(logging.VERBOSE, "Adding cover art: %s", song_filename)
     audiofile = eyed3.load(song_filename)
     if audiofile.tag is None:
         audiofile.initTag()
     elif audiofile.tag.album_artist:
         logging.log(logging.VERBOSE, 'Artist: %s', audiofile.tag.album_artist)
-    audiofile.tag.images.set(3, open(art_filename, 'rb').read(), 'image/jpeg')
+    audiofile.tag.images.set(3, art_image, 'image/jpeg')
     audiofile.tag.save()
 
 
@@ -121,14 +124,13 @@ def add_cover_art(path='.', no_gui=False, max_num=1):
         logging.log(logging.VERBOSE, "Processing file: %s", song_filename)
         song_query = extract_query(song_filename)
         try:
-            art_directory = scrape_google_image(song_query + " song cover art", name=song_query, max_num=1)
-            art_filename = os.path.join(art_directory, os.listdir(art_directory)[0])
+            art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=max_num)
             if not no_gui:
-                window = tkinter_window(art_filename, song_filename)
+                window = tkinter_window(art_images, song_filename)
                 if window.is_cancelled:
                     exit()
             else:
-                add_image(art_filename, song_filename)
+                add_image(next(art_images), song_filename)
         except (HTTPError, URLError, ValueError) as e:
             logging.warning('Unable to download images: %s', e)
 
@@ -137,10 +139,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('path', nargs='?', default=os.getcwd(),
                         help='file or directory to be processed (default: current directory)')
+    parser.add_argument('--max-num', nargs='?', default=1, type=int,
+                        help="maximum number of images to be downloaded per query(default: 1)")
     parser.add_argument('--no-gui', action='store_true', help="don't use a gui, automatically add cover art")
     parser.add_argument('--silent', action='store_true', help="don't show console output")
+
     args = parser.parse_args()
 
     if args.silent:
         logging.disable()
-    add_cover_art(path=args.path, no_gui=args.no_gui)
+    add_cover_art(path=args.path, no_gui=args.no_gui, max_num=args.max_num)
