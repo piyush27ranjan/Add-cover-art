@@ -1,3 +1,4 @@
 Pillow==5.3.0
 beautifulsoup4==4.6.3
 eyed3==0.8.8
+lxml==4.2.5
