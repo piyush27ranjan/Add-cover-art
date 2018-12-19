@@ -86,16 +86,21 @@ class tkinter_window:
         self.window.destroy()
 
 
-def add_image(art_image, song_filename):
+def add_image(art_image, song_filename,mime_type='image/jpeg'):
     logging.log(logging.VERBOSE, "Adding cover art: %s", song_filename)
     audiofile = eyed3.load(song_filename)
     if audiofile.tag is None:
         audiofile.initTag()
     elif audiofile.tag.album_artist:
         logging.log(logging.VERBOSE, 'Artist: %s', audiofile.tag.album_artist)
-    audiofile.tag.images.set(3, art_image, 'image/jpeg')
+    audiofile.tag.images.set(3, art_image, mime_type)
     audiofile.tag.save()
 
+def get_image(song_filename):
+    audiofile = eyed3.load(song_filename)
+    if audiofile.tag is not None:
+        return audiofile.tag.images[0].image_data
+    return None
 
 def extract_query(file_path):
     song_name = os.path.split(file_path)[-1]  # Get songs name from file path
@@ -124,7 +129,11 @@ def add_cover_art(path='.', no_gui=False, max_num=1):
         logging.log(logging.VERBOSE, "Processing file: %s", song_filename)
         song_query = extract_query(song_filename)
         try:
-            art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=max_num)
+            current_art_image = get_image(song_filename)
+            if current_art_image is None:
+                art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=max_num)
+            else:
+                art_images = iter([current_art_image,])
             if not no_gui:
                 window = tkinter_window(art_images, song_filename)
                 if window.is_cancelled:
