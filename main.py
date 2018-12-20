@@ -22,6 +22,10 @@ logging.getLogger().setLevel(logging.VERBOSE)
 
 __all__ = ('add_cover_art', 'add_image')
 
+def wrap(string,length):
+    if len(string) > length:
+        return string[:length-3]+'...'
+    return string 
 
 class tkinter_window:
     is_cancelled = False
@@ -36,8 +40,9 @@ class tkinter_window:
         self.window.geometry("300x210")
         self.window.protocol("WM_DELETE_WINDOW", self.on_cancel)
 
+        filename=os.path.split(self.song_filename)[-1]
         heading = tk.Label(self.window,
-                           text='Do you want this image as cover art?\n' + os.path.split(self.song_filename)[-1])
+                           text='Select cover art for\n' + wrap(filename,15))
         self.image_panel = tk.Label(self.window)
         self.update_image()
 
