@@ -31,7 +31,7 @@ Linux Users:
 
 1. Fork this repository and then clone the repository to your local system using `git clone` or extract the *downloaded zip file*.
 
-![clone/download](snap.png)
+![clone/download](Static/snap.png)
 
 <hr>
 
@@ -85,6 +85,6 @@ optional arguments:
 7. If you are unhappy with the image suggested, enter your own query into the search box and press **Search**
 
 ## Sample
-![sample.gif](sample.gif)
+![sample.gif](Static/sample.gif)
 
-![sample.png](sample.png)
+![sample.png](Static/sample.png)
