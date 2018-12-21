@@ -103,9 +103,10 @@ def add_image(art_image, song_filename,mime_type='image/jpeg'):
 
 def get_image(song_filename):
     audiofile = eyed3.load(song_filename)
-    if audiofile.tag is not None:
+    try:
         return audiofile.tag.images[0].image_data
-    return None
+    except:
+        return None
 
 def extract_query(file_path):
     song_name = os.path.split(file_path)[-1]  # Get songs name from file path
@@ -118,7 +119,7 @@ def extract_query(file_path):
     return song_name
 
 
-def add_cover_art(path='.', no_gui=False, max_num=1):
+def add_cover_art(path='.', no_gui=False, max_num=1,overwrite=False):
     song_filenames = []
     if os.path.isdir(path):
         logging.log(logging.VERBOSE, "Finding all .mp3 files in: %s", path)
@@ -135,7 +136,7 @@ def add_cover_art(path='.', no_gui=False, max_num=1):
         song_query = extract_query(song_filename)
         try:
             current_art_image = get_image(song_filename)
-            if current_art_image is None:
+            if overwrite or current_art_image is None:
                 art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=max_num)
             else:
                 art_images = iter([current_art_image,])
@@ -157,9 +158,10 @@ if __name__ == '__main__':
                         help="maximum number of images to be downloaded per query(default: 1)")
     parser.add_argument('--no-gui', action='store_true', help="don't use a gui, automatically add cover art")
     parser.add_argument('--silent', action='store_true', help="don't show console output")
+    parser.add_argument('--overwrite', action='store_true', help="overwrite current cover art")
 
     args = parser.parse_args()
 
     if args.silent:
         logging.disable()
-    add_cover_art(path=args.path, no_gui=args.no_gui, max_num=args.max_num)
+    add_cover_art(path=args.path, no_gui=args.no_gui, max_num=args.max_num,overwrite=args.overwrite)
