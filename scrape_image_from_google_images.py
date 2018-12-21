@@ -10,14 +10,14 @@ from bs4 import BeautifulSoup
 
 def get_soup(url):
     header = {'User-Agent':
-                  "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36"}
+                  "Mozilla/5.0 (Linux; U; Android 4.4.2; en-us; SCH-I535 Build/KOT49H)"}
     return BeautifulSoup(urllib.request.urlopen(urllib.request.Request(url, headers=header)), 'lxml')
 
 
 def scrape_google_image_on_demand(query, max_num=1, search_engine='www.google.co.in'):
     url_query = '+'.join(query.split())
     url = r"https://%s/search?q=%s&source=lnms&tbm=isch" % (search_engine, url_query)
-    logging.debug("Scraping for query: %s", query)
+    logging.log(logging.VERBOSE,"Querying for: %s",url)
     soup = get_soup(url)
     n_images = 0
     for element in itertools.takewhile(lambda _: n_images < max_num, soup.find_all("div", {"class": "rg_meta"},limit=max_num)):
@@ -26,7 +26,7 @@ def scrape_google_image_on_demand(query, max_num=1, search_engine='www.google.co
         if extension in ["png", "jpeg", "jpg"]:
             with urllib.request.urlopen(link) as request:
                 image = request.read()
-            logging.debug("Images downloaded: %s", n_images + 1)
+            logging.log(logging.VERBOSE,"Images downloaded: %s",link)
             n_images += 1
             yield image
     if n_images < 1:
