@@ -90,4 +90,3 @@ optional arguments:
 ## Sample
 ![sample.gif](Static/sample.gif)
 
-![sample.png](Static/sample.png)
