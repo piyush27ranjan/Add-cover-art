@@ -16,7 +16,6 @@ import re
 import itertools
 import tkinter as tk
 from PIL import ImageTk, Image
-from urllib.error import HTTPError, URLError
 
 from scrape_image_from_google_images import scrape_google_image_on_demand
 
@@ -104,9 +103,12 @@ class tkinter_window:
         self.search_button.configure(state='disabled', text='Searching..')
         self.window.update()
         song_query = self.song_query.get()
-        self.art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=self.max_num)
-        self.cached_images = [next(self.art_images)]
-        self.current_art_index = 0
+        try:
+            self.art_images = scrape_google_image_on_demand(song_query + " song cover art")
+            self.cached_images = [next(self.art_images)]
+            self.current_art_index = 0
+        except StopIteration:
+            pass
         self.update_image()
         self.search_button.configure(state='normal', text='Search')
 
@@ -115,7 +117,7 @@ class tkinter_window:
         self.window.destroy()
 
     def on_apply(self):
-        add_image(self.current_art_image, self.song_filename)
+        add_image(self.cached_images[self.current_art_index], self.song_filename)
 
     def on_next(self):
         self.window.destroy()
@@ -149,7 +151,7 @@ def extract_query(file_path):
     return song_name
 
 
-def add_cover_art(path='.', no_gui=False, max_num=1,overwrite=False):
+def add_cover_art(path='.', no_gui=False, overwrite=False):
     song_filenames = []
     if os.path.isdir(path):
         logging.log(logging.VERBOSE, "Finding all .mp3 files in: %s", path)
@@ -166,7 +168,7 @@ def add_cover_art(path='.', no_gui=False, max_num=1,overwrite=False):
         song_query = extract_query(song_filename)
         try:
             current_art_image = get_image(song_filename)
-            art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=max_num)
+            art_images = scrape_google_image_on_demand(song_query + " song cover art")
             if not overwrite and current_art_image is not None:
                 art_images = itertools.chain([current_art_image],art_images)
             if not no_gui:
@@ -175,7 +177,7 @@ def add_cover_art(path='.', no_gui=False, max_num=1,overwrite=False):
                     exit()
             else:
                 add_image(next(art_images), song_filename)
-        except (HTTPError, URLError, ValueError) as e:
+        except StopIteration:
             logging.warning('Unable to download images: %s', e)
 
 
@@ -183,8 +185,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('path', nargs='?', default=os.getcwd(),
                         help='file or directory to be processed (default: current directory)')
-    parser.add_argument('--max-num', nargs='?', default=3, type=int,
-                        help="maximum number of images to be downloaded per query(default: 3)")
     parser.add_argument('--no-gui', action='store_true', help="don't use a gui, automatically add cover art")
     parser.add_argument('--silent', action='store_true', help="don't show console output")
     parser.add_argument('--overwrite', action='store_true', help="overwrite current cover art")
@@ -193,4 +193,4 @@ if __name__ == '__main__':
 
     if args.silent:
         logging.disable()
-    add_cover_art(path=args.path, no_gui=args.no_gui, max_num=args.max_num,overwrite=args.overwrite)
+    add_cover_art(path=args.path, no_gui=args.no_gui, overwrite=args.overwrite)

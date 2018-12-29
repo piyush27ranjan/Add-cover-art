@@ -62,27 +62,30 @@ Alternatively, run a command inside the virtualenv with "pipenv run".
 
 ## Usage and Deployment
 ```
-usage: main.py [-h] [--no-gui] [--silent] [path]
+usage: main.py [-h] [--no-gui] [--silent] [--overwrite] [path]
 
 Add Cover Art: This application will find the .mp3 files in your computer.
 Then it will automatically scrape a suitable cover from google images and
 apply it as a cover art to the mp3 file.
 
 positional arguments:
-  path        file or directory to be processed (default: current directory)
+  path         file or directory to be processed (default: current directory)
 
 optional arguments:
-  -h, --help  show this help message and exit
-  --no-gui    don't use a gui, automatically add cover art
-  --silent    don't show console output
+  -h, --help   show this help message and exit
+  --no-gui     don't use a gui, automatically add cover art
+  --silent     don't show console output
+  --overwrite  overwrite current cover art
+
 ```
 1. Run *command prompt* or *linux shell*
 2. Change directory into the directory containing the `.mp3` files
 3. Run the script
+4. Press the **=>** and **<=** keys to browse an image that you may like.
 4. Press **Apply** Button to set the image as the cover photo if you like it.
 5. Press **Next** Button to process another .mp3 file
 6. Press **Cancel** Button to close the application.
-7. If you are unhappy with the image suggested, enter your own query into the search box and press **Search**
+7. If you are unhappy with the images suggested, enter your own query into the search box and press **Search**
 
 ## Sample
 ![sample.gif](Static/sample.gif)
