@@ -32,8 +32,7 @@ def wrap(string,length):
 class tkinter_window:
     is_cancelled = False
 
-    def __init__(self, art_images, song_filename,max_num=1):
-        self.max_num=max_num
+    def __init__(self, art_images, song_filename):
         self.song_filename = song_filename
         self.art_images = art_images
         self.cached_images=[next(art_images)]
@@ -172,7 +171,7 @@ def add_cover_art(path='.', no_gui=False, overwrite=False):
             if not overwrite and current_art_image is not None:
                 art_images = itertools.chain([current_art_image],art_images)
             if not no_gui:
-                window = tkinter_window(art_images, song_filename,max_num)
+                window = tkinter_window(art_images, song_filename)
                 if window.is_cancelled:
                     exit()
             else:

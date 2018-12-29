@@ -37,7 +37,7 @@ def scrape_google_image_on_demand(query, search_engine='www.google.co.in'):
     except (HTTPError, URLError):
         return
 
-def scrape_google_image(query, max_num=1, search_engine='www.google.co.in', name=None,):
+def scrape_google_image(query, max_num=3, search_engine='www.google.co.in', name=None,):
     if name is None:
         name = query
     save_directory = os.path.join("images", name)
