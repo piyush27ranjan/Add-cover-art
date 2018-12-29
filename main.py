@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 """
 Add Cover Art:
 This application will find the .mp3 files in your computer.
@@ -11,6 +13,7 @@ import io
 import logging
 import os
 import re
+import itertools
 import tkinter as tk
 from PIL import ImageTk, Image
 from urllib.error import HTTPError, URLError
@@ -30,10 +33,12 @@ def wrap(string,length):
 class tkinter_window:
     is_cancelled = False
 
-    def __init__(self, art_images, song_filename):
+    def __init__(self, art_images, song_filename,max_num=1):
+        self.max_num=max_num
         self.song_filename = song_filename
         self.art_images = art_images
-        self.current_art_image = next(art_images)
+        self.cached_images=[next(art_images)]
+        self.current_art_index = 0
 
         self.window = tk.Tk()
         self.window.title("Add cover art")
@@ -51,6 +56,9 @@ class tkinter_window:
 
         self.search_button = tk.Button(self.window, text="  Search  ", command=self.on_search)
         apply_button = tk.Button(self.window, text="Apply", command=self.on_apply)
+        front_button = tk.Button(self.window, text="⇨", command=self.on_front)
+        back_button = tk.Button(self.window, text="⇦", command=self.on_back)
+
         next_button = tk.Button(self.window, text="Next", command=self.on_next)
         cancel_button = tk.Button(self.window, text="Cancel", command=self.on_cancel)
 
@@ -61,13 +69,34 @@ class tkinter_window:
 
         self.search_button.grid(column=4, row=5, columnspan=4, rowspan=1)
         apply_button.grid(column=1, row=6, columnspan=1)
+        front_button.grid(column=2, row=6, columnspan=1)
+        back_button.grid(column=0, row=6, columnspan=1)
         next_button.grid(column=4, row=6)
         cancel_button.grid(column=5, row=6)
 
         self.window.mainloop()
 
+    def on_back(self):
+        self.current_art_index -= 1
+        if self.current_art_index<0:
+            self.current_art_index = len(self.cached_images)-1
+        self.update_image()
+
+
+    def on_front(self):
+        try:
+            self.cached_images.append(next(self.art_images))
+        except StopIteration:
+            pass
+        self.current_art_index += 1
+        if self.current_art_index >= len(self.cached_images):
+            self.current_art_index=0
+        self.update_image()
+
+
     def update_image(self):
-        image = ImageTk.PhotoImage(Image.open(io.BytesIO(self.current_art_image)).resize((150, 150), Image.ANTIALIAS))
+        current_art_image = self.cached_images[self.current_art_index]
+        image = ImageTk.PhotoImage(Image.open(io.BytesIO(current_art_image)).resize((150, 150), Image.ANTIALIAS))
         self.image_panel.configure(image=image)
         self.image_panel.image = image
 
@@ -75,8 +104,9 @@ class tkinter_window:
         self.search_button.configure(state='disabled', text='Searching..')
         self.window.update()
         song_query = self.song_query.get()
-        self.art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=1)
-        self.current_art_image = next(self.art_images)
+        self.art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=self.max_num)
+        self.cached_images = [next(self.art_images)]
+        self.current_art_index = 0
         self.update_image()
         self.search_button.configure(state='normal', text='Search')
 
@@ -136,12 +166,11 @@ def add_cover_art(path='.', no_gui=False, max_num=1,overwrite=False):
         song_query = extract_query(song_filename)
         try:
             current_art_image = get_image(song_filename)
-            if overwrite or current_art_image is None:
-                art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=max_num)
-            else:
-                art_images = iter([current_art_image,])
+            art_images = scrape_google_image_on_demand(song_query + " song cover art", max_num=max_num)
+            if not overwrite and current_art_image is not None:
+                art_images = itertools.chain([current_art_image],art_images)
             if not no_gui:
-                window = tkinter_window(art_images, song_filename)
+                window = tkinter_window(art_images, song_filename,max_num)
                 if window.is_cancelled:
                     exit()
             else:
@@ -154,8 +183,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('path', nargs='?', default=os.getcwd(),
                         help='file or directory to be processed (default: current directory)')
-    parser.add_argument('--max-num', nargs='?', default=1, type=int,
-                        help="maximum number of images to be downloaded per query(default: 1)")
+    parser.add_argument('--max-num', nargs='?', default=3, type=int,
+                        help="maximum number of images to be downloaded per query(default: 3)")
     parser.add_argument('--no-gui', action='store_true', help="don't use a gui, automatically add cover art")
     parser.add_argument('--silent', action='store_true', help="don't show console output")
     parser.add_argument('--overwrite', action='store_true', help="overwrite current cover art")

@@ -1,5 +1,7 @@
-import itertools
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
+import itertools
 import argparse
 import json
 import logging
