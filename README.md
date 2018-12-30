@@ -40,7 +40,7 @@ Linux Users:
 ```
   pip install -r requirements.txt
 ```
-3. Install the following modules using pip
+3. Install the following modules using pip (Optional)
 
 ```
   pip install python-magic-bin
@@ -57,8 +57,8 @@ For *Linux* systems, run the given command on shell:
   sudo apt-get install python3-pil.imagetk
 ```
 ## Creating Virtual Environment (optional)
-To activate this project's virtualenv, run "pipenv shell".
-Alternatively, run a command inside the virtualenv with "pipenv run".
+To activate this project's virtualenv, run `pipenv shell`.
+Alternatively, run a command inside the virtualenv with `pipenv run`.
 
 ## Usage and Deployment
 ```
@@ -81,7 +81,7 @@ optional arguments:
 1. Run *command prompt* or *linux shell*
 2. Change directory into the directory containing the `.mp3` files
 3. Run the script
-4. Press the **=>** and **<=** keys to browse an image that you may like.
+4. Press the **⇦** and **⇨** keys to browse an image that you may like.
 4. Press **Apply** Button to set the image as the cover photo if you like it.
 5. Press **Next** Button to process another .mp3 file
 6. Press **Cancel** Button to close the application.
