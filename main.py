@@ -51,6 +51,7 @@ class tkinter_window:
 
         song_query_question = tk.Label(self.window, text='Enter text to search')
         self.song_query = tk.Entry(self.window)
+        self.song_query.bind('<Return>', self.on_search)
 
         self.search_button = tk.Button(self.window, text="  Search  ", command=self.on_search)
         apply_button = tk.Button(self.window, text="Apply", command=self.on_apply)
@@ -98,7 +99,7 @@ class tkinter_window:
         self.image_panel.configure(image=image)
         self.image_panel.image = image
 
-    def on_search(self):
+    def on_search(self,*args):
         self.search_button.configure(state='disabled', text='Searching..')
         self.window.update()
         song_query = self.song_query.get()
