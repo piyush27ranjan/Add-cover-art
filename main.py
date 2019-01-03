@@ -176,18 +176,21 @@ def add_cover_art(path='.', no_gui=False, overwrite=False):
                 if window.is_cancelled:
                     exit()
             else:
+                next(art_images)
                 add_image(next(art_images), song_filename)
         except StopIteration:
             logging.warning('Unable to download images: %s', e)
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__, epilog="if no optional argument is specified, the gui is enabled and overwrite is disabled")
     parser.add_argument('path', nargs='?', default=os.getcwd(),
                         help='file or directory to be processed (default: current directory)')
-    parser.add_argument('--no-gui', action='store_true', help="don't use a gui, automatically add cover art")
     parser.add_argument('--silent', action='store_true', help="don't show console output")
-    parser.add_argument('--overwrite', action='store_true', help="overwrite current cover art")
+    
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--no-gui', action='store_true', help="don't use a gui, automatically overwrite and add cover art")
+    group.add_argument('--overwrite', action='store_true', help="use gui and overwrite current cover art from a list of choices")
 
     args = parser.parse_args()
 
