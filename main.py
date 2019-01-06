@@ -25,10 +25,12 @@ logging.getLogger().setLevel(logging.VERBOSE)
 
 __all__ = ('add_cover_art', 'add_image')
 
-def wrap(string,length):
+
+def wrap(string, length):
     if len(string) > length:
-        return string[:length-3]+'...'
-    return string 
+        return string[:length - 3] + '...'
+    return string
+
 
 class tkinter_window:
     is_cancelled = False
@@ -36,7 +38,7 @@ class tkinter_window:
     def __init__(self, art_images, song_filename):
         self.song_filename = song_filename
         self.art_images = art_images
-        self.cached_images=[next(art_images)]
+        self.cached_images = [next(art_images)]
         self.current_art_index = 0
 
         self.window = tk.Tk()
@@ -45,7 +47,7 @@ class tkinter_window:
         self.window.protocol("WM_DELETE_WINDOW", self.on_cancel)
         self.window.resizable(width=False, height=False)
 
-        filename=os.path.split(self.song_filename)[-1]
+        filename = os.path.split(self.song_filename)[-1]
         heading = tk.Label(self.window,
                            text='Select cover art for\n' + wrap(filename,40))
         self.image_panel = ttk.Label(self.window)
@@ -79,10 +81,9 @@ class tkinter_window:
 
     def on_back(self):
         self.current_art_index -= 1
-        if self.current_art_index<0:
-            self.current_art_index = len(self.cached_images)-1
+        if self.current_art_index < 0:
+            self.current_art_index = len(self.cached_images) - 1
         self.update_image()
-
 
     def on_front(self):
         try:
@@ -91,9 +92,8 @@ class tkinter_window:
             pass
         self.current_art_index += 1
         if self.current_art_index >= len(self.cached_images):
-            self.current_art_index=0
+            self.current_art_index = 0
         self.update_image()
-
 
     def update_image(self):
         current_art_image = self.cached_images[self.current_art_index]
@@ -101,7 +101,7 @@ class tkinter_window:
         self.image_panel.configure(image=image)
         self.image_panel.image = image
 
-    def on_search(self,*args):
+    def on_search(self, *args):
         self.search_button.configure(state='disabled', text='Searching..')
         self.window.update()
         song_query = self.song_query.get()
@@ -125,7 +125,7 @@ class tkinter_window:
         self.window.destroy()
 
 
-def add_image(art_image, song_filename,mime_type='image/jpeg'):
+def add_image(art_image, song_filename, mime_type='image/jpeg'):
     logging.log(logging.VERBOSE, "Adding cover art: %s", song_filename)
     audiofile = eyed3.load(song_filename)
     if audiofile.tag is None:
@@ -135,12 +135,14 @@ def add_image(art_image, song_filename,mime_type='image/jpeg'):
     audiofile.tag.images.set(3, art_image, mime_type)
     audiofile.tag.save()
 
+
 def get_image(song_filename):
     audiofile = eyed3.load(song_filename)
     try:
         return audiofile.tag.images[0].image_data
     except:
         return None
+
 
 def extract_query(file_path):
     song_name = os.path.split(file_path)[-1]  # Get songs name from file path
@@ -172,7 +174,7 @@ def add_cover_art(path='.', no_gui=False, overwrite=False):
             current_art_image = get_image(song_filename)
             art_images = scrape_google_image_on_demand(song_query + " song cover art")
             if not overwrite and current_art_image is not None:
-                art_images = itertools.chain([current_art_image],art_images)
+                art_images = itertools.chain([current_art_image], art_images)
             if not no_gui:
                 window = tkinter_window(art_images, song_filename)
                 if window.is_cancelled:
@@ -189,7 +191,7 @@ if __name__ == '__main__':
     parser.add_argument('path', nargs='?', default=os.getcwd(),
                         help='file or directory to be processed (default: current directory)')
     parser.add_argument('--silent', action='store_true', help="don't show console output")
-    
+
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--no-gui', action='store_true', help="don't use a gui and overwrite current cover art from a list of choices")
     group.add_argument('--overwrite', action='store_true', help="use gui and overwrite current cover art from a list of choices")
