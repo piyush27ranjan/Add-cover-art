@@ -76,7 +76,7 @@ positional arguments:
 optional arguments:
   -h, --help   show this help message and exit
   --silent     don't show console output
-  --no-gui     don't use a gui, automatically overwrite and add cover art
+  --no-gui     don't use a gui and overwrite current cover art from a list of choices
   --overwrite  use gui and overwrite current cover art from a list of choices
 
 if no optional argument is specified, the gui is enabled and overwrite is

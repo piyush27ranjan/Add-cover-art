@@ -15,6 +15,7 @@ import os
 import re
 import itertools
 import tkinter as tk
+from tkinter import ttk
 from PIL import ImageTk, Image
 
 from scrape_image_from_google_images import scrape_google_image_on_demand
@@ -39,37 +40,38 @@ class tkinter_window:
         self.current_art_index = 0
 
         self.window = tk.Tk()
-        self.window.title("Add cover art")
-        self.window.geometry("300x210")
+        self.window.title("Add Cover Art")
+        self.window.geometry("450x250")
         self.window.protocol("WM_DELETE_WINDOW", self.on_cancel)
+        self.window.resizable(width=False, height=False)
 
         filename=os.path.split(self.song_filename)[-1]
         heading = tk.Label(self.window,
-                           text='Select cover art for\n' + wrap(filename,15))
-        self.image_panel = tk.Label(self.window)
+                           text='Select cover art for\n' + wrap(filename,40))
+        self.image_panel = ttk.Label(self.window)
         self.update_image()
 
-        song_query_question = tk.Label(self.window, text='Enter text to search')
-        self.song_query = tk.Entry(self.window)
+        song_query_question = ttk.Label(self.window, text='Enter Search Text')
+        self.song_query = ttk.Entry(self.window)
         self.song_query.bind('<Return>', self.on_search)
 
-        self.search_button = tk.Button(self.window, text="  Search  ", command=self.on_search)
-        apply_button = tk.Button(self.window, text="Apply", command=self.on_apply)
-        front_button = tk.Button(self.window, text="⇨", command=self.on_front)
-        back_button = tk.Button(self.window, text="⇦", command=self.on_back)
+        self.search_button = ttk.Button(self.window, text="Search", command=self.on_search)
+        apply_button = ttk.Button(self.window, text="Apply", command=self.on_apply)
+        front_button = ttk.Button(self.window, text="⇨", command=self.on_front)
+        back_button = ttk.Button(self.window, text="⇦", command=self.on_back)
+		
+        next_button = ttk.Button(self.window, text="Next", command=self.on_next)
+        cancel_button = ttk.Button(self.window, text="Cancel", command=self.on_cancel)
 
-        next_button = tk.Button(self.window, text="Next", command=self.on_next)
-        cancel_button = tk.Button(self.window, text="Cancel", command=self.on_cancel)
-
-        heading.grid(column=0, row=0, columnspan=6, rowspan=2)
-        self.image_panel.grid(column=0, row=3, columnspan=3, rowspan=3)
+        heading.grid(column=0, row=0, columnspan=6, rowspan=2, pady=(10,10))
+        self.image_panel.grid(column=0, row=3, columnspan=3, rowspan=3, pady=(0,10))
         song_query_question.grid(column=3, row=3, columnspan=4, rowspan=1)
         self.song_query.grid(column=3, row=4, columnspan=4, rowspan=1)
 
         self.search_button.grid(column=4, row=5, columnspan=4, rowspan=1)
         apply_button.grid(column=1, row=6, columnspan=1)
-        front_button.grid(column=2, row=6, columnspan=1)
-        back_button.grid(column=0, row=6, columnspan=1)
+        front_button.grid(column=2, row=6, columnspan=1, padx=(0,10))
+        back_button.grid(column=0, row=6, columnspan=1, padx=(10,0))
         next_button.grid(column=4, row=6)
         cancel_button.grid(column=5, row=6)
 
@@ -178,7 +180,7 @@ def add_cover_art(path='.', no_gui=False, overwrite=False):
             else:
                 next(art_images)
                 add_image(next(art_images), song_filename)
-        except StopIteration:
+        except StopIteration as e:
             logging.warning('Unable to download images: %s', e)
 
 
@@ -189,7 +191,7 @@ if __name__ == '__main__':
     parser.add_argument('--silent', action='store_true', help="don't show console output")
     
     group = parser.add_mutually_exclusive_group()
-    group.add_argument('--no-gui', action='store_true', help="don't use a gui, automatically overwrite and add cover art")
+    group.add_argument('--no-gui', action='store_true', help="don't use a gui and overwrite current cover art from a list of choices")
     group.add_argument('--overwrite', action='store_true', help="use gui and overwrite current cover art from a list of choices")
 
     args = parser.parse_args()
